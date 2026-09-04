@@ -1,0 +1,8 @@
+.kaggle/
+*.token
+__pycache__/
+.DS_Store
+
+# Human-study raw captures can be large and may contain voices/usernames.
+HUMAN_DEV25/raw/
+HUMAN_DEV25/aligned_media/

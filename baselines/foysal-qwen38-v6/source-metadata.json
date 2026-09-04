@@ -1,0 +1,50 @@
+{
+  "author": "FOYSAL",
+  "categoryIds": [
+    "gpu"
+  ],
+  "competitionDataSources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "currentVersionNumber": 6,
+  "currentVersionNumberNullable": 6,
+  "datasetDataSources": [
+    "driessmit1/arc3-vllm-h100-wheelhouse-v3",
+    "jakobbrggen/taaf-kaggle-source-anim-20260807-anim"
+  ],
+  "dockerImage": "gcr.io/kaggle-private-byod/python@sha256:57e612b484cf3df5026ee4dcc3cb176974b22b2bc0937fb1e16132a8be4cb13c",
+  "dockerImageNullable": "gcr.io/kaggle-private-byod/python@sha256:57e612b484cf3df5026ee4dcc3cb176974b22b2bc0937fb1e16132a8be4cb13c",
+  "enableGpu": true,
+  "enableGpuNullable": true,
+  "enableInternet": false,
+  "enableInternetNullable": false,
+  "enableTpu": false,
+  "enableTpuNullable": false,
+  "hasCurrentVersionNumber": true,
+  "hasDockerImage": true,
+  "hasEnableGpu": true,
+  "hasEnableInternet": true,
+  "hasEnableTpu": true,
+  "hasIsPrivate": true,
+  "hasKernelType": true,
+  "hasLanguage": true,
+  "hasMachineShape": true,
+  "id": 129331701,
+  "isPrivate": false,
+  "isPrivateNullable": false,
+  "kernelDataSources": [],
+  "kernelType": "notebook",
+  "kernelTypeNullable": "notebook",
+  "language": "python",
+  "languageNullable": "python",
+  "lastRunTime": "2026-08-31T20:42:41.1006684Z",
+  "machineShape": "NvidiaRtxPro6000",
+  "machineShapeNullable": "NvidiaRtxPro6000",
+  "modelDataSources": [
+    "foysalemonshanto/qwen3-8-27b-fp8-repacked-v1/PyTorch/hf-fp8/1"
+  ],
+  "ref": "foysalemonshanto/lb-9-arc3-duck-v12-with-qwen-3-8-27b",
+  "slug": "lb-9-arc3-duck-v12-with-qwen-3-8-27b",
+  "title": "LB-9 arc3 duck v12 with Qwen 3.8 27B",
+  "totalVotes": 271
+}

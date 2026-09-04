@@ -1,0 +1,107 @@
+1. I see a square boxes, two types, one with an orange line and other with a patern that seems to match when rotated. I also observe a + sign. I see a yellow bar and a red square. I do NOT know what any of these do, so I am first going to figure out what they would mean or work it out on the way. 
+
+2. I first assumed that the box with an orange band is my character and pressed the LEFT, and as hypothesized that was my characted, and now I KNOW what LEFT;RIGHT;DOWN;UP would do. I can also see the light shade area and that seems to represent the region I can move. 
+
+3. I will first try to reach the + sign before reaching for the other box with the shape as the + sign has a shorter manhattan distance from where I am. 
+
+4. I touched the + sign and that resulted in the pattern box rotating such that it matches the box on the bottom left of my screen. I hypothesize that I need to pattern match and reach the terminal location. The terminal location should be where the patten box is, which is inside the shaded region, the hypothesized feasible region of movement. 
+
+5. I will try to reach that pattern box and observe what happens.
+
+6. That solved level 1 of ls20.
+
+7. Now I am on level 2, and I see new objects that have yellow circles. from the previous level I am aware of what my goal is and what my character is. Also, the yellow bars represented my health, or the number of movements I have left. 
+
+8. I will need to go after that + sign again, but I wish to investigate the yellow object first, as there is two of them and iff touching the one moves me to the others location, I could touch the + sign with less moves and further complete with less moves in general. So, lets try it out.
+
+9. The yellow ring box did not really teleport me as I hypothesized, but it healed my health bar. So, the goal is clear now on. Reach the + sign then rotate to match. Also, it will be beneficial to touch and heal next to the + sign as I may not have enough moves to reach terminal.
+
+10. I ran out of yellow bars and that deducted one of my red boxes, which now I know that it represents the overall life and I have 2/3 left. 
+
+11. This time rather than reaching for the yellow ring near the terminal I should go for the + sign then heal once at the + sign's yellow ring box then heal again at the terminal box's heal ring box then hit the terminal. Need to watch out that hiiting + actually matches the rotation, we may need to interact with it multiple times to achieve the match that we want.
+
+12. I was right and indeed we needed to interact with the + multiple times to achieve the rotation we want.
+
+13. Level solved as hypothesized. This level introduced the yellow heal thing which can be useful later on
+
+14. Now level 3/7 and I see that the terminal and the goal has different colors, and I identify some object that may be able to change the color such that I can match the terminal with the goal, I'll investigate that first.
+
+15. Also, I observe that there are these white slabs, and it is on our way to the color box, so lets find out on the way.
+
+16. The slab ended up pushing be straight, to the end of the feasible region, interesting findinc and there is another one on the opposite side of the terminal, so we can reach the slab then get pushed to the terminal.
+
+17. Now to the color box, let's see if that changes the color.
+
+18. That indeed changed the color of my goal to match the terminal, now I need to interact with the + such that the rotations are right. 
+
+19. I was nearly out of my health so interacted with the yellow thing and it healed me as I hypothesized before. Now moving to the + sign to rotate
+
+20. Rotation worked, now going to my slab hypothesis, hope this pushes me to the terminal region.
+
+21. It did push me pretty far, but not to the far end, I should move to the terminal myself to end this level.
+
+22. level 3/7 cleared now to 4/7
+
+23. NOW on this level I see that the goal and the terminal has a different shpae and color, so will def need to interact with that object which resembles the shape of the goal (bottom left).
+
+24. In terms of moving I think going for the color box to change from green to blue then using the slabs to move to the bottom yellow heal then moving up to change my shape would be optimal
+
+25. Going back to the slabs, I remember that it pushed me to the end of the map, but the exception was the terminal region, that may be a special case. Let me find it out. 
+
+26. Found my way via using the slabs expected moves, and I interacted with the color box multiple times by moving back and forth to change the goal's color to blue to match the terminal.
+
+27. Now moving to the bottom heal box, then will move to the pattern box.
+
+28. Here again, needed to use my understanding of the slab movements to expect where the path would launch me and avoid slabs such that would throw me off the trajectory. And interacting with the pattern box changed the goal as I expected to match the terminal. So, I'll move to the end and finish this level
+
+29. Now level 5/7, I see the need of color change and pattern change, but I also see a + sign again, so there may need to be a rotation to match the goal and terminal.
+
+30. I will move first to the color box then the pattern box then the + box. Also, using the slabs to get to where I want seems important.
+
+31. As I move the + box moved, would need to carefully observe that as I move towards the color box.
+
+32. Reached the color box and changed the color to red to match the terminal. Also, went to a near heal box to get my health up as it was running out. The + sign seems to move sideways (in x end to end) but it needs further observation to predict where it will be.
+
+33. Now moving to the pattern box while carefully observing the + box.
+
+34. Reached the pattern box and matched the pattern of the goal and terminal, and did a near heal box stop to fill my health. The + sign seems to move in total 3 boxes left mid right. I will try to approach it and rotate my goal to match the terminal.
+
+35. Done, using the prediction of the + box saved me a few moves, now I need to heal and reach the terminal. There seems to be a slab that can push me to the terminal, we would need to use that as our health cannot clearly make it the way we came.
+
+36. Level solved, now to level 6/7/
+
+37. This level has 2 terminal boxes, and I think we should terminate in either. But looking at the current map, going for the red one seems easier, as the blue one would requrie a pattern change and a color change and a potential roation. However, the red one only needs a rotation and color change.
+
+38. I will aim for the red terminla and first rotate, then heal on the low left side then go for a color change. 
+
+39. After one move I observe that the + box moves as the previous level, we can use the same asusmptions (3 boxes left mid right).
+
+40. I think it moved a bit more than the 3 box range but I was able to chase it and match my rotation to the terminal. Now I need a color change.
+
+41. Also, the color box moves, and it seems to move in a circular direction, would take that into account and save a few moves. 
+
+42. Color matched and I will aim for the top right heal then use the slabs to hit my terminal.
+
+42. The first terminal did NOT end the level, but it made it dissapear. Which implies I need to do BOTH of them. So, I will first try the color then the pattern as we need to change our pattern to get a sense of whether we need that rotation or not.
+
+43. Color matched now moving to the pattern box, and will heal afterwards.
+
+44. The pattern changed to a desired one, and we would need a rotation. Would heal then move to rotation and hit terminal.
+
+45. Was able to solve this level as hypothesized. It was crucial that I used my observations on how each box mvoed, as moving the wrong way may have resulted in results that I did not wish, for example if I moved in the same direction of the color box, the color would change no matter what I intend.
+
+46. Now level 7/7, the map is dark, so it would imply that I would have to investigate and do the goal terminal matchings as I did in preivous levels.
+
+47. Would investigate the bottom first.
+
+48. Found a color change and a pattern change, but the terminal box is missing so we would come back to here iff color or pattern change is necessary. Now moving to the bottom right.
+
+49. Found the terminal while going to the bottom right, and it seems like I would need all three changes. So, I'll head back to the bottom left to match the color and pattern first. Also, was able to see that rotation box was at the top right, that would be my next destination.
+
+50. Pattern and color matched, now going for that rotation. 
+
+51. The route to rotaiton needs to be carefully planed with my health bar in consideration. 
+
+52. The rotation box seems to be moving up and down, I'll use my previous hypothesis to match the terminals pattern then go on to finish this final level.
+
+53. All done.

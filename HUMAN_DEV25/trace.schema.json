@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/arc-agi-3/human-trace.schema.json",
+  "title": "ARC-AGI-3 human reasoning trace event",
+  "description": "Schema for one line of a reasoning JSONL file.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "session_id",
+    "event_index",
+    "event_type",
+    "timestamp_iso"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "session_id": { "type": "string", "minLength": 1 },
+    "event_index": { "type": "integer", "minimum": 0 },
+    "event_type": {
+      "enum": [
+        "session_start",
+        "decision",
+        "outcome",
+        "level_summary",
+        "session_end"
+      ]
+    },
+    "timestamp_iso": { "type": "string", "format": "date-time" },
+    "source": { "enum": ["live", "posthoc", "derived"] },
+    "game_id": { "type": "string" },
+    "participant_id": { "type": "string" },
+    "protocol_version": { "type": "string" },
+    "exposure": {
+      "enum": ["first_contact", "seen_unsolved", "experienced"]
+    },
+    "capture": {
+      "type": "object",
+      "properties": {
+        "environment_recording": { "type": "boolean" },
+        "screen": { "type": "boolean" },
+        "audio": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "level_index": { "type": "integer", "minimum": 0 },
+    "frame_index": { "type": "integer", "minimum": 0 },
+    "frame_hash": { "type": "string" },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "salient_objects": { "$ref": "#/$defs/stringList" },
+        "frame_delta": { "type": "string" },
+        "progress_signals": { "$ref": "#/$defs/stringList" },
+        "verbatim": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "beliefs": {
+      "type": "object",
+      "properties": {
+        "goal": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hypothesis" }
+        },
+        "mechanics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hypothesis" }
+        },
+        "object_roles": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hypothesis" }
+        },
+        "hidden_state": { "$ref": "#/$defs/stringList" }
+      },
+      "additionalProperties": false
+    },
+    "uncertainty": { "type": "string" },
+    "candidate_experiments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/experiment" }
+    },
+    "choice": {
+      "type": "object",
+      "required": ["action_sequence", "intent", "predicted_outcome"],
+      "properties": {
+        "action_sequence": { "$ref": "#/$defs/stringList" },
+        "intent": { "type": "string" },
+        "predicted_outcome": { "type": "string" },
+        "disconfirming_outcome": { "type": "string" },
+        "stop_condition": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "confidence": { "$ref": "#/$defs/probability" },
+    "operator_labels": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/operator" },
+      "uniqueItems": true
+    },
+    "verbatim": { "type": "string" },
+    "action_sequence": { "$ref": "#/$defs/stringList" },
+    "observed_delta": { "type": "string" },
+    "prediction_result": {
+      "enum": ["matched", "partial", "contradicted", "ambiguous"]
+    },
+    "surprise": { "$ref": "#/$defs/probability" },
+    "belief_updates": { "$ref": "#/$defs/stringList" },
+    "next_question": { "type": "string" },
+    "verified_controls": { "$ref": "#/$defs/stringList" },
+    "verified_mechanics": { "$ref": "#/$defs/stringList" },
+    "goal_summary": { "type": "string" },
+    "reusable_plan": { "$ref": "#/$defs/stringList" },
+    "failed_hypotheses": { "$ref": "#/$defs/stringList" },
+    "cross_level_memory": { "$ref": "#/$defs/stringList" },
+    "outcome": {
+      "enum": ["completed", "partial", "game_over", "abandoned", "error"]
+    },
+    "levels_completed": { "type": "integer", "minimum": 0 },
+    "contamination_notes": { "type": "string" },
+    "retrospective_summary": { "type": "string" },
+    "proposed_operators": { "$ref": "#/$defs/stringList" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "const": "session_start" } } },
+      "then": {
+        "required": [
+          "game_id",
+          "participant_id",
+          "protocol_version",
+          "exposure",
+          "capture"
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "decision" } } },
+      "then": {
+        "required": [
+          "source",
+          "level_index",
+          "frame_index",
+          "observation",
+          "beliefs",
+          "uncertainty",
+          "candidate_experiments",
+          "choice",
+          "operator_labels"
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "outcome" } } },
+      "then": {
+        "required": [
+          "source",
+          "level_index",
+          "frame_index",
+          "action_sequence",
+          "observed_delta",
+          "prediction_result",
+          "surprise",
+          "belief_updates"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "level_summary" } }
+      },
+      "then": {
+        "required": [
+          "level_index",
+          "verified_controls",
+          "verified_mechanics",
+          "goal_summary",
+          "cross_level_memory"
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "session_end" } } },
+      "then": { "required": ["outcome", "levels_completed"] }
+    }
+  ],
+  "$defs": {
+    "probability": { "type": "number", "minimum": 0, "maximum": 1 },
+    "stringList": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "hypothesis": {
+      "type": "object",
+      "required": ["statement", "confidence", "status"],
+      "properties": {
+        "id": { "type": "string" },
+        "statement": { "type": "string", "minLength": 1 },
+        "confidence": { "$ref": "#/$defs/probability" },
+        "status": {
+          "enum": ["new", "live", "supported", "verified", "rejected"]
+        },
+        "evidence": { "$ref": "#/$defs/stringList" },
+        "counterevidence": { "$ref": "#/$defs/stringList" }
+      },
+      "additionalProperties": false
+    },
+    "experiment": {
+      "type": "object",
+      "required": ["action_sequence", "question", "predicted_outcome"],
+      "properties": {
+        "action_sequence": { "$ref": "#/$defs/stringList" },
+        "question": { "type": "string" },
+        "predicted_outcome": { "type": "string" },
+        "information_gain": { "$ref": "#/$defs/probability" },
+        "risk": { "$ref": "#/$defs/probability" },
+        "estimated_action_cost": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "operator": {
+      "enum": [
+        "segment_objects",
+        "track_object_identity",
+        "detect_frame_delta",
+        "infer_control_mapping",
+        "infer_object_role",
+        "infer_goal",
+        "track_hidden_state",
+        "choose_information_gain_probe",
+        "predict_transition",
+        "verify_or_reject_hypothesis",
+        "construct_local_world_model",
+        "plan_route",
+        "execute_guarded_macro",
+        "detect_stagnation",
+        "recover_or_reset",
+        "compress_cross_level_memory"
+      ]
+    }
+  },
+  "additionalProperties": false
+}
