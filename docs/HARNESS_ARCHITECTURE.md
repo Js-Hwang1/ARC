@@ -1,6 +1,6 @@
 # ARC-AGI-3 Harness Architecture
 
-Status: proposed baseline architecture, 2026-09-04
+Status: active baseline architecture, 2026-09-04
 
 ## Decisions
 
@@ -13,13 +13,14 @@ Status: proposed baseline architecture, 2026-09-04
 3. Do not use Cython initially. It is useful for accelerating Python loops but
    does not provide the ownership, exhaustive enums, or memory-safety benefits
    motivating a compiled core.
-4. Treat model serving as a replaceable backend:
-   - local Apple Silicon: MLX-LM;
-   - Kaggle RTX PRO 6000: vLLM or the fastest verified CUDA backend;
-   - experiments: the same harness can target 4B, 8B, or larger checkpoints.
-5. Prebuild the Kaggle Rust wheel for Linux x86-64. Do not depend on a Rust
+4. Develop on RTX PRO 6000 Blackwell Server Edition GPUs from the beginning.
+   SGLang is the provisional primary inference backend and vLLM is the required
+   reference/fallback until the workload benchmark selects a winner.
+5. Treat model serving as replaceable. The same harness must target SGLang and
+   vLLM, and must permit 4B, 8B, or larger checkpoints without policy changes.
+6. Prebuild the Kaggle Rust wheel for Linux x86-64. Do not depend on a Rust
    compiler or the internet being present during the scored notebook run.
-6. Optimize score per GPU-second, not harness microbenchmarks. A 64-by-64 frame
+7. Optimize score per GPU-second, not harness microbenchmarks. A 64-by-64 frame
    has only 4,096 cells, so model inference, context construction, and failed
    actions are expected to dominate until profiling proves otherwise.
 
@@ -29,9 +30,9 @@ Status: proposed baseline architecture, 2026-09-04
 ARC-AGI-3 Python API
         |
         v
-thin Python adapter  <---->  inference backend (MLX locally / vLLM on Kaggle)
+thin Python adapter  <---->  inference backend (SGLang primary / vLLM fallback)
         |
-        | one batched call per environment step
+        | one bulk transfer per new observation; never per-pixel calls
         v
 Rust core
   - immutable raw event log
@@ -107,25 +108,27 @@ the next turn. Only the final decision, prediction, result, and updated compact
 memory persist. This follows Qwen's multi-turn recommendation and prevents
 reasoning transcripts from consuming the context budget.
 
-## Local 16 GB Apple Silicon target
+## RTX PRO 6000 development target
 
-Use the 4-bit MLX conversion of `Qwen3-4B-Thinking-2507`. Its weights are about
-2.26 GB, leaving enough unified memory for MLX, macOS, the harness, and a useful
-KV cache. Do not configure the native 262K context on a 16 GB machine.
+Every performance-sensitive development run should use one RTX PRO 6000
+Blackwell Server Edition GPU per solver replica, matching Kaggle's
+`g4-standard-48` allocation. The cluster's additional GPUs accelerate the
+experiment matrix; they must not hide a design that requires multiple GPUs for
+one competition run.
 
-For this model's 36 layers, 8 KV heads, and 128-dimensional heads, a 16-bit KV
-cache is approximately 144 KiB per token:
+Start `Qwen3-4B-Thinking-2507` in BF16. A four-billion-parameter BF16 model uses
+roughly 8 GB for weights, while the target GPU provides 96 GB. Preserve the
+remaining memory for long KV caches and concurrent game sessions rather than
+quantizing prematurely. Quantization becomes an experiment only if a larger
+model or measured concurrency requires it.
 
-| Active context | Approximate KV cache |
-| ---: | ---: |
-| 8K | 1.1 GiB |
-| 16K | 2.3 GiB |
-| 32K | 4.5 GiB |
-| 64K | 9.0 GiB |
+The competition machine has one GPU, but the workload is not batch size one.
+Multiple environments will independently reach model-decision points. The
+scheduler must keep several requests in flight so the inference engine can use
+continuous batching. Benchmark concurrency 1 for latency, then 4, 8, 16, and 32
+for the real throughput/latency frontier.
 
-Start with an 8K or 16K active context and rely on the external event store and
-compact memory. The local machine is suitable for functional iteration and
-single-game experiments, but it is not a throughput proxy for the Kaggle GPU.
+See `INFERENCE_BACKEND_DECISION.md` for the backend selection gate.
 
 ## Kaggle packaging
 
@@ -179,7 +182,7 @@ Implement only the following before adding semantic planners:
    animation summaries.
 4. A typed Python bridge and JSONL replay CLI.
 5. Synthetic tests plus a replay test from a real public-game recording.
-6. A backend-neutral model client exercised against local MLX-LM.
+6. A backend-neutral model client exercised against SGLang and vLLM.
 
 This slice is deliberately game-agnostic. `ls20` can then be used to drive the
 first missing capabilities without adding a game-ID branch.
@@ -190,4 +193,4 @@ first missing capabilities without adding a game-ID branch.
 - [Kaggle notebook documentation](https://www.kaggle.com/docs/notebooks)
 - [Kaggle Python image](https://github.com/Kaggle/docker-python)
 - [Qwen3-4B-Thinking-2507 model card](https://huggingface.co/Qwen/Qwen3-4B-Thinking-2507)
-- [MLX 4-bit conversion](https://huggingface.co/mlx-community/Qwen3-4B-Thinking-2507-4bit)
+- [Google Cloud G4 machine series](https://cloud.google.com/compute/docs/accelerator-optimized-machines#g4_series)
