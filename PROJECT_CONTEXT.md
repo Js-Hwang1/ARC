@@ -72,6 +72,10 @@ must remain an experimental variable rather than an article of faith.
     performs offline installation only; no Rust compilation during scoring.
 12. No custom CUDA kernel for 64-by-64 grid operations unless profiling later
     proves CPU contention. GPU work initially targets inference serving.
+13. Docker is a cluster build/test tool, not the Kaggle deployable. Kaggle does
+    not support Docker-in-Docker and cannot pull a registry image with internet
+    disabled. Ship a pinned, checksum-verified offline wheelhouse/input overlay
+    into Kaggle's managed container.
 
 ## Competition facts verified as of 2026-09-04
 
@@ -237,6 +241,7 @@ leader and not the architecture to copy wholesale. See `SUBMISSION_RUNBOOK.md`.
 - `docs/NOTEBOOK_DESIGN.md`: target Kaggle notebook and runtime lifecycle.
 - `docs/HARNESS_ARCHITECTURE.md`: Rust/Python system boundaries.
 - `docs/INFERENCE_BACKEND_DECISION.md`: SGLang/vLLM hypothesis and benchmark.
+- `docs/OFFLINE_PACKAGING.md`: cluster Docker and Kaggle offline overlay flow.
 - `docs/ARC_AGI_3_DATA_SPLITS.md`: released/hidden split terminology.
 - `docs/ARC_AGI_3_SCORING_STRATEGY.md`: scoring priorities.
 - `docs/HUMAN_REASONING_TRACE_PROTOCOL.md`: trace collection protocol.
@@ -253,14 +258,18 @@ leader and not the architecture to copy wholesale. See `SUBMISSION_RUNBOOK.md`.
    - exact GPU name, compute capability, driver, CUDA, and NVML;
    - CPU model/count, RAM, local storage;
    - Python, PyTorch, SGLang, vLLM, FlashInfer, and Triton compatibility.
-2. Create the backend-neutral ARC-shaped inference benchmark described in
+2. Save a minimal Kaggle RTX notebook and record the exact Kaggle image digest
+   and runtime fingerprint.
+3. Build and offline-test the pinned wheelhouse overlay from that exact base
+   image, following `docs/OFFLINE_PACKAGING.md`.
+4. Create the backend-neutral ARC-shaped inference benchmark described in
    `docs/INFERENCE_BACKEND_DECISION.md`.
-3. Run SGLang and vLLM in BF16 with identical Qwen3-4B-Thinking-2507 files,
+5. Run SGLang and vLLM in BF16 with identical Qwen3-4B-Thinking-2507 files,
    tokenizer, chat template, prompts, sampling, and seeds.
-4. Freeze the first backend/version/wheelhouse only after the benchmark.
-5. Scaffold the Rust `arc-core` types, perception slice, PyO3 bridge, and replay
+6. Freeze the first backend/version/wheelhouse only after the benchmark.
+7. Scaffold the Rust `arc-core` types, perception slice, PyO3 bridge, and replay
    tests.
-6. Create a minimal deployment notebook that preflights, verifies offline
+8. Create a minimal deployment notebook that preflights, verifies offline
    inputs, starts the chosen server, warms up, and shuts down safely.
 
 ## Open decisions

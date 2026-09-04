@@ -66,6 +66,9 @@ The notebook attaches four categories of immutable Kaggle input:
 - pinned SGLang or vLLM offline wheelhouse;
 - our Python package, Rust wheel, schemas, manifests, and public replay assets.
 
+The cluster may use a custom Docker image to build and test these artifacts, but
+the notebook cannot pull or run that image. See `OFFLINE_PACKAGING.md`.
+
 ## Notebook cells
 
 The committed notebook should contain approximately these cells and no hidden
@@ -102,7 +105,8 @@ Never recursively select the first vaguely matching model or wheel directory.
 
 Install pinned wheels with `pip --no-index --find-links`. Do not invoke `apt`,
 Git, Curl, Hugging Face Hub, or a source compiler. Set all model libraries to
-offline mode before importing them.
+offline mode before importing them. The wheelhouse is produced and smoke-tested
+inside a cluster Docker image based on the recorded Kaggle image digest.
 
 ### 5. Package import and configuration
 
@@ -336,20 +340,23 @@ under compatible open-source terms by the deadline.
 
 1. Capture the cluster software/hardware fingerprint and build the reproducible
    CUDA environment.
-2. Implement the backend-neutral benchmark and run SGLang versus vLLM.
-3. Scaffold the Rust core and Python bridge described in
+2. Save a minimal Kaggle RTX notebook to capture its exact base image and
+   runtime fingerprint, then build the offline overlay in that base image.
+3. Implement the backend-neutral benchmark and run SGLang versus vLLM.
+4. Scaffold the Rust core and Python bridge described in
    `HARNESS_ARCHITECTURE.md`.
-4. Create a minimal notebook that only preflights, installs, launches the
+5. Create a minimal notebook that only preflights, installs, launches the
    selected server, makes a warmup request, and shuts down.
-5. Add official environment discovery and a random/legal-action smoke agent.
-6. Add the observation store and perception packet.
-7. Integrate the first typed Qwen decision loop on `ls20`.
+6. Add official environment discovery and a random/legal-action smoke agent.
+7. Add the observation store and perception packet.
+8. Integrate the first typed Qwen decision loop on `ls20`.
 
 ## Sources
 
 - [ARC-AGI-3 Kaggle overview and code requirements](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3/overview)
 - [ARC-AGI-3 Kaggle data/API description](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3/data)
 - [Kaggle notebook documentation](https://www.kaggle.com/docs/notebooks)
+- [Offline packaging strategy](OFFLINE_PACKAGING.md)
 - [SGLang documentation](https://docs.sglang.io/)
 - [vLLM documentation](https://docs.vllm.ai/)
 - [Qwen3-4B-Thinking-2507 model card](https://huggingface.co/Qwen/Qwen3-4B-Thinking-2507)
