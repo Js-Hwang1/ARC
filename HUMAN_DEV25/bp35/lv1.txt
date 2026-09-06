@@ -1,0 +1,6 @@
+Goal: Move the character (controllable) to the PINK shape 
+Components: The light blue playable region; the Green Box; The wall (black with grey dots); the player (blue and slight yellow pixels)
+Actions and rules: LEFT;RIGHT; Click (Click on the Green Box to REMOVE it)
+Failure conditions: the white bar on the bottom fills up from the left
+Evidence: a. An initial feasible move fills up the purple in the white bar on the bottom. b. Moving to a GAP in revealed that there is some sort of fall UP and revealed MORE green boxes. c. logically as the feasible region is limited, clicking the green box that blocked the next visible feasible region removed the green box barrier and allowed the character to move up. d. moving decently up revealed a new component (the pink object) and touching it terminated the game with a win
+Uncertainty: N/A

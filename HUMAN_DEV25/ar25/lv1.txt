@@ -1,0 +1,6 @@
+Goal: Place the Grey shape into the Yellow shape 
+Components: Grey shape; Yellow Shape; a reflection of Grey shape in Black with white dots. 
+Actions and rules: UP;DOWN;LEFT;RIGHT 
+Failure conditions: the yellow health bar on the right depletes 
+Evidence: a. An initial move depletes the yellow bar directly indicating that it is a health bar (available moves). b. UP;DOWN;LEFT;RIGHT correspond to their labels. c. the GOAL has to be assumed
+Uncertainty: The Black shape and the light blue line does not seem to play an obvious role yet.
