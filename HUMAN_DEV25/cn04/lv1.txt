@@ -1,0 +1,6 @@
+Goal: stack the red dots together
+Components: One white shape with two red dots 1 box apart; and one green shape with two red dots, 1 box apart
+Actions and rules: UP;DOWN;LEFT;RIGHT (to MOVE UDLR); SPACE to rotate the WHITE shape clockwise; CLICK to select the MOVEABLE shape (moveable is WHITE)
+Failure conditions: At the TOP the DARK GREY bar fills up with white from left to right
+Evidence: a. UDLR translated to the UDLR of the white shape b. clicking the green one turned that into white and UDLR translated, indicating that click changes the controllable object. c. spacebar resulted in a rotation clockwise d. it was an hypothesis to overlap those RED dots and that ended up clearing the level 
+Uncertainty: N/A
