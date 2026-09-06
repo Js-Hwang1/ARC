@@ -1,0 +1,6 @@
+Goal: Match and color the box in the middle such that it matches the top left objective.
+Components: The OBJECTIVE (thing to match on the top left); our current pallet; the paint bucket; the color selection
+Actions and rules: UP;DOWN;LEFT;RIGHT (to rotate the paint bucket); SPACE (top paint); CLICK (to change colors)
+Failure conditions: the grey bar on the bottom depletes from right to left
+Evidence: a. UDLR rotation can be discovered after reasonable actions. the rotations match the intuitive directions of rotations b. the effect of the spacebar is immediate c. knowing that spacebar COLORS allows to think to MATCH the picture on the top left d. the color pallet is clickable on the top (to change colors)
+Uncertainty: N/A
